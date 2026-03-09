@@ -1,0 +1,224 @@
+<html>
+<head>
+
+<title>Shopping Cart</title>
+
+<style>
+
+    @media (max-width:768px){
+
+body{
+padding:20px;
+}
+
+.cart-item{
+flex-direction:column;
+align-items:flex-start;
+}
+
+.cart-item img{
+width:100%;
+max-width:120px;
+}
+
+.qty{
+width:100%;
+}
+
+}
+
+body{
+font-family:Arial;
+padding:40px;
+}
+
+.cart-item{
+display:flex;
+align-items:center;
+gap:20px;
+margin-bottom:20px;
+border-bottom:1px solid white;
+padding-bottom:10px;
+}
+
+.cart-item img{
+width:80px;
+}
+
+.qty{
+width:60px;
+}
+
+.remove{
+color:black;
+cursor:pointer;
+font-size:20px;
+}
+
+.total{
+margin-top:30px;
+font-size:20px;
+}
+
+button{
+padding:10px 20px;
+background:rgb(161, 16, 16);
+color:white;
+border:none;
+cursor:pointer;
+}
+
+</style>
+
+</head>
+
+<body>
+
+<h2>Your Cart</h2>
+
+<div id="cart-items"></div>
+
+<div class="total">
+Total: ₹<span id="total">0</span>
+
+</div>
+
+
+  <button class="checkout" onclick="goToPayment()">Proceed to Checkout</button>
+ <div id="paymentBox" style="display:none;margin-top:30px">
+
+<h3>Select Payment Method</h3>
+
+<label>
+<input type="radio" name="pay"> Cash on Delivery
+</label><br><br>
+
+<label>
+<input type="radio" name="pay"> UPI / Google Pay / PhonePe
+</label><br><br>
+
+<label>
+<input type="radio" name="pay"> Credit / Debit Card
+</label><br><br>
+
+<button onclick="placeOrder()" class="checkout">
+Pay Now
+</button>
+
+</div>
+
+
+<script>
+
+    function goToPayment(){
+window.location.href="payment.html";
+}
+
+let cart=JSON.parse(localStorage.getItem("cart")) || [];
+
+let container=document.getElementById("cart-items");
+
+function loadCart(){
+
+container.innerHTML="";
+
+let total=0;
+
+cart.forEach((item,index)=>{
+
+let subtotal=item.price*item.qty;
+
+total+=subtotal;
+
+container.innerHTML+=`
+
+<div class="cart-item">
+
+<span class="remove" onclick="removeItem(${index})">❌</span>
+
+<img src="${item.image}">
+
+<div>
+<h4>${item.name}</h4>
+<p>₹${item.price}</p>
+</div>
+
+<input class="qty" type="number" value="${item.qty}" min="1"
+onchange="changeQty(${index},this.value)">
+
+<div>₹${subtotal}</div>
+
+</div>
+
+`;
+
+});
+
+document.getElementById("total").innerText=total;
+
+}
+
+function changeQty(index,qty){
+
+cart[index].qty=parseInt(qty);
+
+localStorage.setItem("cart",JSON.stringify(cart));
+
+loadCart();
+
+}
+
+function removeItem(index){
+
+cart.splice(index,1);
+
+localStorage.setItem("cart",JSON.stringify(cart));
+
+loadCart();
+
+}
+
+function checkout(){
+
+alert("Order Placed Successfully");
+
+localStorage.removeItem("cart");
+
+location.reload();
+
+}
+
+loadCart();
+
+
+function checkout(){
+
+localStorage.removeItem("cart");
+
+window.location.href="seccess.html";
+
+}
+function showPayment(){
+document.getElementById("paymentBox").style.display="block";
+}
+
+function placeOrder(){
+alert("Payment Successful ✅");
+window.location.href="seccess.html";
+}
+function checkout(){
+
+localStorage.removeItem("cart");
+
+window.location.href="seccess.html";
+
+}
+
+</script>
+
+</script>
+</script>
+</script>
+
+</body>
+</html>
